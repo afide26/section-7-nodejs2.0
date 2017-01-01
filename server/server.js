@@ -4,38 +4,51 @@ mongoose.connect('mongodb://localhost:27017/TodoApp');
 
 var Todo = mongoose.model('Todo',{
   text:{
-    type: String
+    type: String,
+    required: true,
+    minlength: 5,
+    trim: true
 
   },
   completed:{
-    type: Boolean
+    type: Boolean,
+    default: false
   },
   completedAt:{
-    type: Number
+    type: Number,
+    default: null
   }
 });
 
-// // Create a new todo
-  // var newTodo = new Todo({text: 'Cook dinner'});
+var User = mongoose.model('User', {
+  email: {
+    type: String,
+    trim: true,
+    required: true,
+    minlength: 5
+  }
+});
 
 
-// // Save the todo in the database
-  // newTodo.save().then(function(doc){
-  //   console.log('Saved todo', doc);
-  // }, function(err){
-  //   console.log('Unable to save todo');
-  // });
+// // Challenge
+//   var challenge = new Todo({text:'Finish this course'});
 
-// Challenge
-  var challenge = new Todo({text:'Complete course', completed: true, completedAt: new Date().getTime()});
+//   challenge.save().then((doc)=>{
+//     console.log('New todo has been saved', doc);
+//   }, (err)=>{
+//     console.log('Failed to save new todo', err);
+//   });
 
-  challenge.save().then((doc)=>{
-    console.log('New todo has been saved', doc);
-  }, (err)=>{
-    console.log('Failed to save new todo', err);
+
+userOne = new User({
+  email: 'alan@yahoo.com.au'
+});
+
+userOne.save().then(function(doc){
+    console.log('New user created', doc);
+  }, function(err){
+    console.log('Unable to save user', JSON.stringify(err, undefined, 2));
   });
-
-
 
 
 
