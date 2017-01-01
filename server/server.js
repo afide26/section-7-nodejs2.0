@@ -1,54 +1,32 @@
-var mongoose = require('mongoose');
-mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/TodoApp');
+var express = require('express');
+var bodyParser = require('body-parser');
 
-var Todo = mongoose.model('Todo',{
-  text:{
-    type: String,
-    required: true,
-    minlength: 5,
-    trim: true
+var app = express();
+var port = process.env.PORT || 3000;
 
-  },
-  completed:{
-    type: Boolean,
-    default: false
-  },
-  completedAt:{
-    type: Number,
-    default: null
-  }
-});
+// Local Imports
+var {mongoose} = require('./db/mongoose');
+var {Todo} = require('./db/models/todo.js');
+var {User} = require('./db/models/user.js');
 
-var User = mongoose.model('User', {
-  email: {
-    type: String,
-    trim: true,
-    required: true,
-    minlength: 5
-  }
-});
+// MIDDLEWARE
+app.use(bodyParser.json());
 
-
-// // Challenge
-//   var challenge = new Todo({text:'Finish this course'});
-
-//   challenge.save().then((doc)=>{
-//     console.log('New todo has been saved', doc);
-//   }, (err)=>{
-//     console.log('Failed to save new todo', err);
-//   });
-
-
-userOne = new User({
-  email: 'alan@yahoo.com.au'
-});
-
-userOne.save().then(function(doc){
-    console.log('New user created', doc);
-  }, function(err){
-    console.log('Unable to save user', JSON.stringify(err, undefined, 2));
+// ROUTES
+app.post('/todos', function(req, res){
+  var todo = new Todo({
+    text: req.body.text
   });
 
+  todo.save().then((doc)=>{
+    res.send(doc);
+  }, (e)=>{
+    res.status(400).send(JSON.stringify(e, undefined, 2));
+  })
+});
 
 
+
+app.listen(port, function(){
+  console.log("Listening at port:" + port);
+});
