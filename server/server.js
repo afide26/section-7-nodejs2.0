@@ -6,8 +6,8 @@ var port = process.env.PORT || 3000;
 
 // Local Imports
 var {mongoose} = require('./db/mongoose');
-var {Todo} = require('./db/models/todo.js');
-var {User} = require('./db/models/user.js');
+var {Todo} = require('./models/todo.js');
+var {User} = require('./models/user.js');
 
 // MIDDLEWARE
 app.use(bodyParser.json());
@@ -30,3 +30,7 @@ app.post('/todos', function(req, res){
 app.listen(port, function(){
   console.log("Listening at port:" + port);
 });
+
+module.exports = {
+  app: app
+}
