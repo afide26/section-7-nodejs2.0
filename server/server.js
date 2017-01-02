@@ -27,7 +27,7 @@ app.post('/todos', function(req, res){
   })
 });
 
-// GET Route
+// GET /todos Route
 app.get('/todos', function(req,res){
   Todo.find().then(function(todos){
     // Add an object instead of an array for flexibility
@@ -38,7 +38,6 @@ app.get('/todos', function(req,res){
 });
 
 // GET/todos/:id
-
 app.get('/todos/:id', function(req,res){
   var id = req.params.id;
 
@@ -59,6 +58,22 @@ app.get('/todos/:id', function(req,res){
   })
 });
 
+// DELETE ROUTES
+app.delete('/todos/:id', (req, res)=>{
+  var id = req.params.id
+  if(!ObjectID.isValid(id)){
+    return res.status(404).send({});
+  }
+
+  Todo.findByIdAndRemove(id).then((todo)=>{
+    if(!todo){
+      return res.status(404).send();
+    }
+    res.send(todo);
+  }).catch((e)=>{
+    res.status(404).send({});
+  });
+});
 
 app.listen(port, function(){
   console.log("Listening at port:" + port);

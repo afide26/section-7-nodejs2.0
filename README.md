@@ -1,5 +1,7 @@
-###This is the repository for Section 7 of The Complete NodeJS Course 2.0 By Andrew Mead
-####Student name: Alan Fidelino
+##This is the repository for Section 7 of [The Complete NodeJS Course 2.0 By Andrew Mead](https://www.udemy.com/the-complete-web-developer-course-2/)
+###Student name: Alan Fidelino
+####Main Topic : API Development
+
 
 #####Learnings and tools used for this section:
 1. MongoDB - Database
