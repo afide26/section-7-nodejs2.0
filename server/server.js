@@ -1,10 +1,11 @@
+require('./config/config.js');
 var express    = require('express');
 var _          = require('lodash');
 var bodyParser = require('body-parser');
 var {ObjectID} = require('mongodb');
 
 var app        = express();
-var port       = process.env.PORT || 3000;
+var port       = process.env.PORT;
 
 // Local Imports
 var {mongoose} = require('./db/mongoose');
