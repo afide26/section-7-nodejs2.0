@@ -12,3 +12,5 @@
 8. Mongoose validators
 9. Express
 10. Body parser(body-parser) - to send JSON to the server and converts it to a JS Object
+11. Testing Routes
+12. Deploy API to Heroku using mLab MongoDB add on
