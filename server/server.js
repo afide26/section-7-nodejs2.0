@@ -13,6 +13,7 @@ var {User} = require('./models/user.js');
 app.use(bodyParser.json());
 
 // ROUTES
+// Post Route
 app.post('/todos', function(req, res){
   var todo = new Todo({
     text: req.body.text
@@ -23,6 +24,16 @@ app.post('/todos', function(req, res){
   }, (e)=>{
     res.status(400).send(JSON.stringify(e, undefined, 2));
   })
+});
+
+// GET Route
+app.get('/todos', function(req,res){
+  Todo.find().then(function(todos){
+    // Add an object instead of an array for flexibility
+    res.send({todos:todos})
+  }, function(e){
+    res.status(400).send(e);
+  });
 });
 
 
