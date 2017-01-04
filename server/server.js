@@ -1,16 +1,17 @@
 require('./config/config.js');
-var express    = require('express');
-var _          = require('lodash');
-var bodyParser = require('body-parser');
-var {ObjectID} = require('mongodb');
+var express        = require('express');
+var _              = require('lodash');
+var bodyParser     = require('body-parser');
+var {ObjectID}     = require('mongodb');
 
-var app        = express();
-var port       = process.env.PORT;
+var app            = express();
+var port           = process.env.PORT;
 
 // Local Imports
-var {mongoose} = require('./db/mongoose');
-var {Todo}     = require('./models/todo.js');
-var {User}     = require('./models/user.js');
+var {mongoose}     = require('./db/mongoose');
+var {Todo}         = require('./models/todo.js');
+var {User}         = require('./models/user.js');
+var {authenticate} = require('./middleware/authenticate.js');
 
 // MIDDLEWARE
 app.use(bodyParser.json());
@@ -130,6 +131,10 @@ app.get('/users', (req, res)=>{
   }).catch((e)=>{
     res.status(404).send(e);
   })
+});
+
+app.get('/users/me', authenticate, (req, res)=>{
+  res.send(req.user);
 });
 
 
