@@ -14,7 +14,7 @@ var authenticate = (req, res, next) => {
     req.token = token;
     next();
   }).catch((e)=>{
-    res.status(401).send(JSON.stringify(e, undefined, 2));
+    res.status(401).send(e);
   })
 };
 
