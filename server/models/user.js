@@ -96,6 +96,16 @@ UserSchema.statics.findByCredentials = function(email, password){
     })
   })
 };
+
+UserSchema.methods.removeToken = function(token){
+  var user = this;
+
+  return user.update({
+    $pull:{
+      tokens:{token:token}
+    }
+  });
+};
 // Lecture 92 Hashing
 // =====================
 
