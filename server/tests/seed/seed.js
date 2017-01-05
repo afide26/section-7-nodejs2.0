@@ -25,7 +25,11 @@ var users = [
   {
     _id: userTwoId,
     email:'tin@example.com',
-    password:'userTwoPass'
+    password:'userTwoPass',
+    tokens:[{
+      access:'auth',
+      token: jwt.sign({_id: userTwoId.toHexString(), access:'auth'}, 'abc123').toString()
+    }]
   }
 ];
 
@@ -34,12 +38,12 @@ var users = [
 var todos = [{
   _id: new ObjectID(),
   text: "First Test todo",
-  completed: false,
-  completedAt: null
+  _creator: userOneId
   },
   {
     _id: new ObjectID(),
     text:"Second Test todo",
+    _creator: userTwoId,
     completed:true,
     completedAt: 1483359001030
 }];

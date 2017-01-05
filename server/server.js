@@ -18,9 +18,10 @@ app.use(bodyParser.json());
 
 // ROUTES
 // Post Route
-app.post('/todos', function(req, res){
+app.post('/todos', authenticate, function(req, res){
   var todo = new Todo({
-    text: req.body.text
+    text: req.body.text,
+    _creator: req.user._id
   });
 
   todo.save().then((doc)=>{
@@ -31,8 +32,10 @@ app.post('/todos', function(req, res){
 });
 
 // GET /todos Route
-app.get('/todos', function(req,res){
-  Todo.find().then(function(todos){
+app.get('/todos', authenticate, function(req,res){
+  Todo.find({
+    _creator: req.user._id
+  }).then(function(todos){
     // Add an object instead of an array for flexibility
     res.send({todos:todos})
   }, function(e){
@@ -41,7 +44,7 @@ app.get('/todos', function(req,res){
 });
 
 // GET/todos/:id
-app.get('/todos/:id', function(req,res){
+app.get('/todos/:id', authenticate, function(req,res){
   var id = req.params.id;
 
   // Validate the id
@@ -49,7 +52,11 @@ app.get('/todos/:id', function(req,res){
     return res.status(404).send();
   }
 
-  Todo.findById(id).then((todo)=>{
+  Todo.findOne({
+    _id: id,
+    _creator:req.user._id
+  })
+  .then((todo)=>{
     if(!todo){
       return res.status(404).send();
     }
@@ -62,13 +69,17 @@ app.get('/todos/:id', function(req,res){
 });
 
 // DELETE ROUTES
-app.delete('/todos/:id', (req, res)=>{
+app.delete('/todos/:id', authenticate, (req, res)=>{
   var id = req.params.id
   if(!ObjectID.isValid(id)){
     return res.status(404).send({});
   }
 
-  Todo.findByIdAndRemove(id).then((todo)=>{
+  Todo.findOneAndRemove({
+    _id: id,
+    _creator: req.user._id
+  })
+  .then((todo)=>{
     if(!todo){
       return res.status(404).send();
     }
@@ -80,7 +91,7 @@ app.delete('/todos/:id', (req, res)=>{
 
 
 // UPDATE ROUTES
-app.patch('/todos/:id', (req,res)=>{
+app.patch('/todos/:id', authenticate, (req,res)=>{
   var id = req.params.id;
   var body = _.pick(req.body, ['text', 'completed']);
 
@@ -100,7 +111,10 @@ app.patch('/todos/:id', (req,res)=>{
   // Use mongoose modifier variables here
   // Body is an object that's why it's used in $set
   // new:true is like returnOriginal:false in mongodb-update.js
-  Todo.findByIdAndUpdate(id, {$set: body}, {new: true}).then((todo)=>{
+  Todo.findOneAndUpdate({
+    _id: id,
+    _creator: req.user._id
+  }, {$set: body}, {new: true}).then((todo)=>{
     if(!todo){
       return res.status(404).send();
     }
