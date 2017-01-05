@@ -233,7 +233,7 @@ describe('POST/users', ()=>{
     request(app)
       .post('/users')
       .send({email:'ala', password:'123'})
-      .expect(404)
+      .expect(400)
       .end(done);
   });
 
@@ -241,7 +241,7 @@ describe('POST/users', ()=>{
     request(app)
       .post('/users')
       .send({email:users[0].email,password:'123'})
-      .expect(404)
+      .expect(400)
       .end((err)=>{
         if(err){
           return done(err);
